@@ -1,0 +1,24 @@
+name: Convert PDFs
+
+on: [push]
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Python packages
+        run: pip install pymupdf
+
+      - name: Run converter
+        run: python scripts/convert.py
+
+      - name: Save output
+        run: |
+          git config --global user.name "bot"
+          git config --global user.email "bot@github.com"
+          git add .
+          git commit -m "Auto convert PDFs" || exit 0
+          git push
